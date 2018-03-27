@@ -1,0 +1,124 @@
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+ul {
+  list-style-type: none;
+}
+.video-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-width: 960px;
+}
+
+video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+/*Video controls*/
+.video-controls {
+  position: absolute;
+  bottom: -45px; /*height of controls container*/
+  left: 50%;
+  padding: 7px;
+  background: rgba(0, 0, 0, .35);
+  transform: translateX(-50%);
+  transition: bottom .15s ease-in;
+}
+
+.video-wrapper:focus > video + .video-controls,
+.video-wrapper:hover > video + .video-controls {
+  bottom: 20px;
+  z-index: 2;
+}
+/*Video controls*/
+.video-controls .btn {
+  padding: 5px 0;
+  width: 31px;
+  font-size: 18px;
+  text-align: center;
+  color: #fff;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: opacity .175s ease-in;
+
+}
+.video-controls .btn:focus {
+    outline: 0;
+}
+.video-controls .btn:hover {
+    opacity: .25;
+}
+/*Note Controls*/
+.note-controls{
+  position: absolute;
+  bottom: -45px; /*height of controls container*/
+  left: 50%;
+  padding: 7px;
+  background: rgba(0, 0, 0, .35);
+  transform: translateX(-50%);
+  transition: bottom .25s ease-in;
+}
+.note-controls:fucus>
+.note-controls .btn{
+  padding: 15px 0;
+  width: 60px;
+  font-size: 30px;
+  text-align: center;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+/*Note Marker Bar*/
+.note-marker{
+  position: relative;
+  max-width:  960px;
+}
+.note-marker-fill {
+  width: 10px;
+  height: 15px;
+  opacity: .5;
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+}
+.note-marker-fill:hover{
+    opacity:1;
+    z-index: 100;
+}
+.note-marker-fill.note{
+  background-color: #1D6FA2;
+}
+.note-marker-fill.highlight{
+  background-color: #E3C819;
+}
+.note-marker-fill.question{
+  background-color: #E11B3D;
+}
+.template{
+  display: none;
+}
+/*Caption*/
+.caption-container{
+  max-height: 70%;
+  overflow-y: scroll;
+}
+.caption-line{
+  margin-bottom: 4px;
+  cursor: pointer; 
+}
+.caption-line:hover{
+  color: #1a5177;
+}
+.highlight-text{
+  display: inline;
+  background-color: rgba(226, 209, 9, 0.3);
+}
