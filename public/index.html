@@ -15,7 +15,8 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="container vertical-center">
+	<div class="head"></div>
+	<div class="container">
 		<div class="row">
 			<div class="col"><h3>Social Psychology: Nonverbal and verbal channels</h3></div>
 		</div>
@@ -64,12 +65,29 @@
 					<li class="template caption-line"></li>
 				</ul>
 			</div>
+			<div class="note-box">
+				<p class="txt"></p>
+				<input type="text">
+				<button type="button" class="btn btn-secondary btn-sm edit-save float-md-right" name="edit">Edit</button>
+				<button type="button" class="btn btn-secondary btn-sm delete float-md-right" name="delete">Delete</button>
+			</div>
 		</div>
 	</div>
 	<div id="note-controls" class="note-controls">
-		<button class="btn btn-highlight" title="hover text"><img src="./image/highlight.png"></button>
-		<button class="btn btn-note"><img src="./image/note.png"></button>
-		<button class="btn btn-question"><img src="./image/question.png"></button>
+		<div class="row">
+			<div class="col">
+				<button class="btn btn-highlight"><img src="./image/highlight.png"></button>
+				<p>Highlight</p>
+			</div>
+			<div class="col">
+				<button class="btn btn-note"><img src="./image/note.png"></button>
+				<p>Notes</p>
+			</div>
+			<div class="col">
+				<button class="btn btn-question"><img src="./image/question.png"></button>
+				<p>Question</p>
+			</div>
+		</div>
 	</div>
 	<!-- The Note Modal -->
 	<div class="modal fade" id="note-modal">
@@ -84,13 +102,13 @@
 	      <!-- Modal body -->
 	    <div class="modal-body">
 	      	<form>
-			  <div class="form-group">
+			  <!-- <div class="form-group">
 			    <label for="form-input-concep">What concepts are covered in this notes? </label>
-			    <input type="text" class="form-control" id="form-input-concept" placeholder="water; ice; transform">
-			  </div>
+			    <input type="text" class="form-control" id="form-notes-concept" placeholder="water; ice; transform">
+			  </div> -->
 			  <div class="form-group">
 			    <label for="form-input-note">Your notes</label>
-			    <textarea class="form-control" id="form-input-notes" rows="3"></textarea>
+			    <textarea class="form-control" id="form-notes-content" rows="3"></textarea>
 			  </div>
 			</form>
 		</div>
@@ -118,13 +136,13 @@
 	      <!-- Modal body -->
 	    <div class="modal-body">
 	      	<form>
-			  <div class="form-group">
+			  <!-- <div class="form-group">
 			    <label for="form-input-concep">What concepts are covered in this question?</label>
-			    <input type="text" class="form-control" id="form-input-concept" placeholder="water; ice; transform">
-			  </div>
+			    <input type="text" class="form-control" id="form-question-concept" placeholder="water; ice; transform">
+			  </div> -->
 			  <div class="form-group">
 			    <label for="form-input-note">Your question</label>
-			    <textarea class="form-control" id="form-input-notes" rows="3" placeholder="I don't understand..."></textarea>
+			    <textarea class="form-control" id="form-question-content" rows="3" placeholder="I don't understand..."></textarea>
 			  </div>
 			</form>
 		</div>
@@ -143,6 +161,7 @@
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
 	<script src="./firebase.js"></script>
+	<script src="./login.js"></script>
 	<script src="./playerControl.js"></script>
 	<script src="./noteControl.js"></script>
 	<script src="./captionControl.js"></script>

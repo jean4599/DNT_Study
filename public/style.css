@@ -1,8 +1,5 @@
-.vertical-center {
-  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-  min-height: 100vh; /* These two lines are counted as one :-)       */
-  margin-top: 100px;
-  align-items: center;
+.head {
+  height: 50px;
 }
 ul {
   list-style-type: none;
@@ -74,9 +71,16 @@ video {
   padding: 3px;
   left: 100px;
   top:100px;
-  width: 180px;
+  /*width: 180px;*/
   background-color: #EEE;
   border-radius: 5px;
+}
+.note-controls .row{
+  margin: 0;
+}
+.note-controls .col{
+  padding: 0;
+  margin-left:2px; 
 }
 .note-controls img{
   width: 40px;
@@ -85,7 +89,11 @@ video {
 .note-controls button{
   padding:5px;
 }
-
+.note-controls p{
+  font-size: 10px;
+  text-align: center;
+  margin:0px;
+}
 /*Note Marker Bar*/
 .note-marker{
   position: relative;
@@ -138,4 +146,29 @@ video {
 .highlight-question{
   display: inline;
   background-color: rgba(255, 27, 61, 0.3);
+}
+/*Hover notes*/
+/*.notes-container{
+  width: 200px;
+  height: 70%;
+  position: absolute;
+  background: red;
+  z-index: 10;
+}*/
+.note-box{
+  width: 200px;
+  min-height: 100px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  border: 3px solid black;
+  display: none; 
+  position: fixed;
+  padding: 5px;
+}
+.note-box input{
+  display: none;
+  margin: 5px;
+}
+.note-box button{
+  margin: 2px;
 }

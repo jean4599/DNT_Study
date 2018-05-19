@@ -3,8 +3,10 @@ videoElement.onloadedmetadata = function(){
 	const captionContainer = document.querySelector('.caption-container')
 	const captionLineTemplate = document.querySelector('.caption-line')
 
-	firebase.database().ref(course).child('caption').once('value').then(function(snapshot){
-		//console.log(snapshot.val())
+	const fire_route = course+'/'+location.hash.split("#")[1];
+	firebase.database().ref(fire_route+'/'+userID).child('caption').once('value').then(function(snapshot){
+	
+		console.log(userID)	//console.log(snapshot.val())
 		if(snapshot.val()!=null){
 			captionContainer.innerHTML = snapshot.val();
 		}else{
