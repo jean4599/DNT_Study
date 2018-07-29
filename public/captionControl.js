@@ -1,30 +1,36 @@
 videoElement.onloadedmetadata = function(){
 	videoElement.textTracks[0].mode="hidden";
 	const captionContainer = document.querySelector('.caption-container')
-	const captionLineTemplate = document.querySelector('.caption-line')
+	const captionLineTemplate = document.querySelector('.caption.template')
+	console.log(captionLineTemplate)
+	const userID = location.hash.split("#")[1]
+	const fire_route = course+'/'+userID;
+	firebase.database().ref(fire_route+'/caption').once('value').then(function(snapshot){
 
-	const fire_route = course+'/'+location.hash.split("#")[1];
-	firebase.database().ref(fire_route+'/'+userID).child('caption').once('value').then(function(snapshot){
-	
-		console.log(userID)	//console.log(snapshot.val())
 		if(snapshot.val()!=null){
+			console.log("database has caption")
 			captionContainer.innerHTML = snapshot.val();
 		}else{
+			console.log('here')
 			captions = videoElement.textTracks[0].cues;
 			// console.log(captions)
 			for (var i =0; i<captions.length; i++){
 				let line = captions[i]
-				newCaptionLine = captionLineTemplate.cloneNode(false);
+
+				newCaptionLine = captionLineTemplate.cloneNode(true);
+				newCaptionLine.style.display='flex';
 				newCaptionLine.classList.remove('template');
-				newCaptionLine.innerHTML = line.text;
+				newCaptionLine.children[1].children[0].innerHTML = line.text;
 				newCaptionLine.id = line.id;
-				newCaptionLine.setAttribute("startTime", line.startTime) ;
-				newCaptionLine.setAttribute("endTime", line.endTime)
+				newCaptionLine.children[0].setAttribute("startTime", line.startTime) ;
+				newCaptionLine.children[0].setAttribute("endTime", line.endTime)
+				newCaptionLine.children[1].setAttribute("startTime", line.startTime)
 
 				captionContainer.appendChild(newCaptionLine);
 			}
 		}
-		$('.caption-line').click(function(){
+		$('.navigator').click(function(){
+			Log("caption:"+$(this).attr('startTime'))
 			videoElement.currentTime = $(this).attr('startTime')
 		})
 	})
@@ -38,10 +44,10 @@ videoElement.ontimeupdate = function(){
 	if(activeCue.length){
 		let activeCaptionId = activeCue[0].id;
 		if(preActiveCaptionId != activeCaptionId){
-			$('.caption-line').css('font-weight', 'normal')
-			$('.caption-line#'+activeCaptionId).css('font-weight', 'bold');
+			$('.caption').css('font-weight', 'normal')
+			$('.caption#'+activeCaptionId).css('font-weight', 'bold');
 			container.animate({
-				scrollTop: $('.caption-line#'+activeCaptionId).offset().top - container.offset().top + container.scrollTop() - 200
+				scrollTop: $('.caption#'+activeCaptionId).offset().top - container.offset().top + container.scrollTop() - 200
 			})
 			preActiveCaptionId = activeCaptionId;
 		}

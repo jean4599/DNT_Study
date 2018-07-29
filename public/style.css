@@ -1,5 +1,9 @@
-.head {
-  height: 50px;
+html, body{
+  min-height: 100vh;
+}
+.container{
+  vertical-align: middle;
+  padding-top: 100px;
 }
 ul {
   list-style-type: none;
@@ -9,7 +13,14 @@ ul {
   overflow: hidden;
   max-width: 960px;
 }
-
+.bg-text{
+  font-size: 1.1em;
+  line-height: 1.5em;
+  margin: 0.2em;
+}
+.bg-margin{
+  margin: 20px;
+}
 video {
   display: block;
   width: 100%;
@@ -128,12 +139,12 @@ video {
   max-height: 70%;
   overflow-y: scroll;
 }
-.caption-line{
-  margin-bottom: 4px;
-  cursor: pointer; 
-}
-.caption-line:hover{
-  color: #1a5177;
+.caption > .navigator{
+ height:15px;
+ width: 15px;
+ border-radius: 7.5px;
+ background-color: #ffa500a6;
+ cursor: pointer;
 }
 .highlight-text{
   display: inline;
@@ -171,4 +182,9 @@ video {
 }
 .note-box button{
   margin: 2px;
+}
+/*micro-note*/
+#highlighted-text-container{
+  height: 400px;
+  overflow-y: scroll;
 }

@@ -1,12 +1,10 @@
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyCqmiXnpV9j1ab0vdxgTM78I5d2mrO_9cg",
-  authDomain: "distributednotetaking.firebaseapp.com",
-  databaseURL: "https://distributednotetaking.firebaseio.com",
-  projectId: "distributednotetaking",
-  storageBucket: "distributednotetaking.appspot.com",
-  messagingSenderId: "731989644644"
-};
-firebase.initializeApp(config);
-
-course="pilot-SocialPsychology";
+    apiKey: "AIzaSyC2Rdkx7T3aKOXLDxDINy6gi_3SHUCsD2Y",
+    authDomain: "distributednotetaking-study3.firebaseapp.com",
+    databaseURL: "https://distributednotetaking-study3.firebaseio.com",
+    projectId: "distributednotetaking-study3",
+    storageBucket: "distributednotetaking-study3.appspot.com",
+    messagingSenderId: "479021051655"
+  };
+  firebase.initializeApp(config);

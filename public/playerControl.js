@@ -24,11 +24,13 @@ const videoElement = document.querySelector('.video-element');
 // Move the video backward for 5 seconds
 const moveBackward = () => {
   videoElement.currentTime -= 5;
+  Log("vid:moveBackward")
 }
 
 // Move the video forward for 5 seconds
 const moveForward = () => {
   videoElement.currentTime += 5;
+  Log("vid:moveForward")
 }
 
 // Mute the video
@@ -53,11 +55,13 @@ const playPauseVideo = () => {
     
     btnPlay.children[0].classList.remove('fa-play');
     btnPlay.children[0].classList.add('fa-pause');
+    Log("vid:play")
   } else {
     videoElement.pause();
 
     btnPlay.children[0].classList.remove('fa-pause');
     btnPlay.children[0].classList.add('fa-play');
+    Log("vid:pause")
   }
 }
 const pauseVideo = ()=>{
@@ -66,6 +70,7 @@ const pauseVideo = ()=>{
 
     btnPlay.children[0].classList.remove('fa-pause');
     btnPlay.children[0].classList.add('fa-play');
+    Log("vid:pause")
   }
 }
 const playVideo = ()=>{
@@ -74,6 +79,7 @@ const playVideo = ()=>{
     
     btnPlay.children[0].classList.remove('fa-play');
     btnPlay.children[0].classList.add('fa-pause');
+    Log("vid:play")
   }
 }
 // Restart the video
@@ -103,8 +109,10 @@ const updateProgress = () => {
 }
 $('.progress').click(function() {
   var percent = event.offsetX / this.offsetWidth;
+  Log("vid:progress"+(percent * videoElement.duration))
   videoElement.currentTime = percent * videoElement.duration;
   progressBar.style.width = percent * 100 + '%';
+
 })
 // Event listeners
 btnBackward.addEventListener('click', moveBackward, false);

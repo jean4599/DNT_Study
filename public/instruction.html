@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Learn with Note-Taking</title>
+	<link rel="stylesheet" type="text/css" href="./style.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="head"></div>
+		<div class="row bg-margin">
+			<h1>Learn with Note-Taking</h1>
+		</div> 
+		<div class="row bg-margin">
+			<div class="col-9 bg-text">Hi! We are crowdsourcing notes for online learners. Thank you in advance for contributing to this task! We believe your notes can help people learn better and deeper! Please read the following instruction to see how to contribute.</div>
+		</div>
+		<div class="row bg-margin">
+			<h5>There are 3 ways you can make a note in this system</h5>
+			<ol class="col-9">
+				<li class="bg-text">Highlight the important part of the video subtitles. This may encourage others focus on important concepts.</li>
+				<img src="./image/highlight.gif" class="bg-margin" />
+				<li class="bg-text">Comment(Note) on the subtitle to express your interpretation or opinion. This may clarify the content or extend others' thoughts.</li>
+				<img src="./image/notes.gif" class="bg-margin" />
+				<li class="bg-text">Ask a question. This may prompt others to reflect or identify unclear part.</li>
+				<img src="./image/question.gif" class="bg-margin" />
+			</ol>
+		</div>
+		<div class="row bg-margin">
+			<h5>You will watch two video-lectures and take notes for them</h5>
+			<ol class="col-9">
+				<li class="bg-text">Introduction to Social Psychology: Nonverbal and verbal channels (6:11)</li>
+				<li class="bg-text">Learn to Program: Python as Calculator (10:33)</li>
+			</ol>
+		</div>
+		<div class="row bg-margin">
+			<h5>Now, please input your worker ID and login into the system (no password is needed)</h5>
+		</div>
+		<div class="row bg-margin">
+			<div class="col-8">
+				<div class="input-group">
+				  <div class="input-group-prepend">
+				    <span class="input-group-text">Worker ID</span>
+				  </div>
+				  	<input type="text"  class="form-control" name="id">
+				</div>
+				<br />
+				<button class="btn btn-primary btn-block" id="login-btn">Login</button>
+			</div>
+		</div>
+	</div>
+	<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+	<script type="text/javascript" src="./firebase.js"></script>
+	<script type="text/javascript" src="login.js"></script>
+	<script src="./log.js"></script>
+</body>
+</html>

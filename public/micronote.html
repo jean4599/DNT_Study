@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Learn with Note-Taking</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="card" style="width: 80%; margin: auto;">
+				<div class="card-body">
+					<h6 class="card-subtitle">
+					Rephrase the highlighted sentences/words into your interpretation, including main idea, supporting details, more examples or explanation
+					</h6>
+					<div class="row" style="padding-top: 25px">
+						<div class="col">
+							<div id="highlighted-text-container">
+								
+							</div>
+						</div>
+						<div class="col">
+							<textarea id="interpretation" class="form-control" style="height: 100%;"></textarea>
+						</div>
+					</div>
+				</div>
+				<button id="nextMicroNote-btn"> Next </button>
+			</div>
+		</div>
+	</div>
+
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+	<script src="./firebase.js"></script>
+	<script src="./login.js"></script>
+	<script src="./createMicroNotes.js"></script>
+</body>
+</html>

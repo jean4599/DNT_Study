@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Distributed Note Taking</title>
+	<title>Learn with Note-Taking</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
@@ -15,18 +15,17 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<div class="head"></div>
 	<div class="container">
 		<div class="row">
-			<div class="col"><h3>Social Psychology: Nonverbal and verbal channels</h3></div>
+			<div class="col"><h3 id="course-title">Introduction to Social Psychology: Nonverbal and verbal channels</h3></div>
 		</div>
 		<div class='row'>
 			<div class="col-8">
 				<div class="video-wrapper">
-					<video class="video-element" preload="auto" crossorigin:*>
-						<source src="./video/SocialPsychology/1.mp4" type="video/mp4">
+					<video id="video" class="video-element" preload="auto" crossorigin:*>
+						<source src="./video/SocialPsychology/video.mp4" type="video/mp4">
 						<!-- <text category="CC" lang="en" type="text/x-srt" src="./video/UX_1.srt" default></text> -->
-						<track src="./video/SocialPsychology/1.vtt" kind="captions" srclang="en" label="English" default>
+						<track src="./video/SocialPsychology/subtitles.vtt" kind="captions" srclang="en" label="English" default>
 
 						Your browser doesn't support the video tag.
 					</video>
@@ -62,7 +61,12 @@
 			</div>
 			<div class="col-4">
 				<ul class="caption-container">
-					<li class="template caption-line"></li>
+					<div class="caption row template" style="display: none">
+						<p class="navigator col-1"></p> 
+						<div class='caption-text-container col'>
+							<div class='text'></div>
+						</div>
+					</div>
 				</ul>
 			</div>
 			<div class="note-box">
@@ -71,6 +75,9 @@
 				<button type="button" class="btn btn-secondary btn-sm edit-save float-md-right" name="edit">Edit</button>
 				<button type="button" class="btn btn-secondary btn-sm delete float-md-right" name="delete">Delete</button>
 			</div>
+		</div>
+		<div class="row">
+			<button class="btn btn-primary" id='next-course'>Generate my notes>></button>
 		</div>
 	</div>
 	<div id="note-controls" class="note-controls">
@@ -156,7 +163,15 @@
 	    </div>
 	  </div>
 	</div>
-
+	<script type="text/javascript">
+		course = 'psychology'
+		document.getElementById('next-course').addEventListener("click", function(){
+			// document.location = "https://goo.gl/forms/xMpc584kScVIjnzj1";
+			// GlobalLog("Finish")
+			document.location = "micronote.html#"+location.hash.split("#")[1];
+			GlobalLog("Generate Notes")
+		});
+	</script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
 	<script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
@@ -165,5 +180,6 @@
 	<script src="./playerControl.js"></script>
 	<script src="./noteControl.js"></script>
 	<script src="./captionControl.js"></script>
+	<script src="./log.js"></script>
 </body>
 </html>

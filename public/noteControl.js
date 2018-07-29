@@ -12,14 +12,21 @@ $(document).ready(function(){
 		snapshot.forEach(function(childSnapshot){
 			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
-			addTimelineMarker(childData.time, 'question', key)
+			addTimelineMarker(childData["_Time"], 'question', key)
 		})
 	})
 	firebase.database().ref(fire_route+'/notes').once("value").then(function(snapshot){
 		snapshot.forEach(function(childSnapshot){
 			var key = childSnapshot.key;
 			var childData = childSnapshot.val();
-			addTimelineMarker(childData.time, 'notes', key)
+			addTimelineMarker(childData["_Time"], 'notes', key)
+		})
+	})
+	firebase.database().ref(fire_route+'/highlight').once("value").then(function(snapshot){
+		snapshot.forEach(function(childSnapshot){
+			var key = childSnapshot.key;
+			var childData = childSnapshot.val();
+			addTimelineMarker(childData["_Time"], 'highlight', key)
 		})
 	})
 })
@@ -33,7 +40,7 @@ document.onmouseup = function(e) {
   if(window.getSelection){selection=window.getSelection();}
   else if(document.getSelection){selection=document.getSelection();}
   else if(window.document.selection){selection=window.document.selection.createRange().text;}
-  if(selection!=''&&(selection.anchorNode.parentElement.className=='caption-line' ||
+  if(selection!=''&&(selection.anchorNode.parentElement.classList.contains('text') ||
   	selection.anchorNode.parentElement.className=='highlight-question' ||
   	selection.anchorNode.parentElement.className=='highlight-notes'||
   	selection.anchorNode.parentElement.className=='highlight-text'))
@@ -52,7 +59,7 @@ function getRange(){
         range = document.selection.createRange();
     }
 }
-function highlightSelectText(type, id) {
+function highlightSelectText(type, key) {
     var sel;
     var allRanges = []
     
@@ -61,9 +68,10 @@ function highlightSelectText(type, id) {
     endContainer = range.endContainer;
 
     if(startContainer==endContainer){
-    	var time = startContainer.parentElement.getAttribute('starttime')
-    	highLightRange(range, type, id, time)
-    	return starttime
+    	console.log(startContainer.parentElement)
+    	var time = startContainer.parentElement.parentElement.getAttribute('starttime')
+    	highLightRange(range, type, key)
+    	return parseFloat(time)
     }
     else{
     	rangeAncestor = range.commonAncestorContainer;
@@ -75,7 +83,7 @@ function highlightSelectText(type, id) {
     	var pars = [];
     	
     	var firstNode = nodeIterator.nextNode(); //I need to get the video starttime of first node 
-    	var time = firstNode.parentElement.getAttribute('starttime')
+    	var time = firstNode.parentElement.parentElement.getAttribute('starttime')
     	pars.push(firstNode);
     	while (currentNode = nodeIterator.nextNode()) {
 			pars.push(currentNode);
@@ -84,28 +92,27 @@ function highlightSelectText(type, id) {
 		var r = document.createRange();
 		r.setStart(pars[0], range.startOffset);
 		r.setEnd(pars[0], pars[0].length);
-		highLightRange(r, type, id, time);
+		highLightRange(r, type, key, time);
 
 		if(pars.length>2){
 			for(var i=1; i<pars.length-1; i++){
 				r.setStart(pars[i], 0);
 				r.setEnd(pars[i], pars[i].length);
-				highLightRange(r, type, id, time);
+				highLightRange(r, type, key, time);
 			}
 		}
 		r.setStart(pars[pars.length-1], 0);
 		r.setEnd(pars[pars.length-1], range.endOffset);
-		highLightRange(r, type, id, time);
+		highLightRange(r, type, key, time);
 
-		return(time)
+		return parseFloat(time)
     }
         
 }
-function highLightRange(range, type, id, time){
+function highLightRange(range, type, key){
 	selectedText = range.toString();
-    var newnode = document.createElement("p");
-    newnode.setAttribute("id",id);
-    newnode.setAttribute("starttime", time)
+    var newnode = document.createElement("div");
+    newnode.setAttribute("key",key);
     newnode.textContent = selectedText;
     switch(type){
     	case 'highlight':
@@ -129,7 +136,7 @@ function clearFormInput(){
 	// $('#form-question-concept').val("");
 	$('#form-question-content').val("");
 }
-function addTimelineMarker(startTime, type, id){
+function addTimelineMarker(startTime, type, key){
 	//Highlight video progress bar
 	var newNoteMarker;
 	switch(type){
@@ -155,22 +162,14 @@ function addTimelineMarker(startTime, type, id){
 		newNoteMarker.setAttribute("time", startTime.toString());
 	else
 		newNoteMarker.setAttribute("time", 0);
-	newNoteMarker.setAttribute("id", id)
+	newNoteMarker.setAttribute("key", key)
 	noteMarkerBar.appendChild(newNoteMarker);
-}
-function makeid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for (var i = 0; i < 5; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
 }
 
 $(".btn-note").click(function(){
 	pauseVideo();
 	$('#note-modal').modal('show')
+	Log("notes:start-notes");
 });
 $(".btn-note-save").click(function(){ //Save Notes
 	//get note content and save to database
@@ -179,12 +178,15 @@ $(".btn-note-save").click(function(){ //Save Notes
 	if(noteContent!=""){
 		var key = firebase.database().ref(fire_route+'/notes').push({
 			// "concepts": noteConcept,
-			"content": noteContent
+			"_Content": noteContent
 		}).key
 		//Highlight transcript
 		var startTime = highlightSelectText('notes', key);
 		//save time
-		firebase.database().ref(fire_route+'/notes/'+key+'/time').set(startTime)
+		firebase.database().ref(fire_route+'/notes/'+key+'/_Time').set(startTime)
+		//save caption
+		var caption = $("div[key='"+key+"']").text().replace(/[\t\n]+/g,' ');
+		firebase.database().ref(fire_route+'/notes/'+key+'/_Caption').set(caption)
 		//Highlight video progress bar
 		addTimelineMarker(startTime,'notes', key)
 		
@@ -196,10 +198,12 @@ $(".btn-note-save").click(function(){ //Save Notes
 	playVideo();
 	
 	clearFormInput();
+	Log("notes:new-notes#"+key+'#'+startTime);
 });
 $(".btn-question").click(function(){
 	pauseVideo();
 	$('#question-modal').modal('show')
+	Log("notes:start-question");
 })
 $(".btn-question-save").click(function(){ //Save Question
 	//get question content and save to database
@@ -208,13 +212,16 @@ $(".btn-question-save").click(function(){ //Save Question
 	if(questionContent!=""){
 		var key = firebase.database().ref(fire_route+'/question').push({
 			// "concepts":questionConcept,
-			"content": questionContent
+			"_Content": questionContent
 		}).key
 	    	console.log("push new question, key = ", key)
 	    	//Highlight transcript
 			var startTime = highlightSelectText('question', key);
 			//save time
-			firebase.database().ref(fire_route+'/question/'+key+'/time').set(startTime)
+			firebase.database().ref(fire_route+'/question/'+key+'/_Time').set(startTime)
+			//save caption
+			var caption = $("div[key='"+key+"']").text().replace(/[\t\n]+/g,' ');
+			firebase.database().ref(fire_route+'/question/'+key+'/_Caption').set(caption)
 			//Highlight video progress bar
 			addTimelineMarker(startTime,'question', key)
 			
@@ -227,13 +234,16 @@ $(".btn-question-save").click(function(){ //Save Question
 	playVideo();
 	
 	clearFormInput();
+	Log("notes:new-question#"+key+'#'+startTime);
 })
 $(".btn-highlight").click(function(){
 	//Highlight transcript
 	var key = firebase.database().ref(fire_route+'/highlight').push().key;
 	var startTime = highlightSelectText('highlight', key);
+	var caption = $("div[key='"+key+"']").text().replace(/[\t\n]+/g,' ');
 	firebase.database().ref(fire_route+'/highlight/'+key).set({
-		time:startTime
+		_Time:startTime,
+		_Caption:caption
 	})
 	//save new highlighted caption to database
 	const captionContainer = document.querySelector('.caption-container')
@@ -243,6 +253,7 @@ $(".btn-highlight").click(function(){
 	addTimelineMarker(startTime,'highlight', key)
 	
 	$(".note-controls").css({display: 'none'})
+	Log("notes:new-highlight#"+key+'#'+startTime);
 })
 $(document).mousedown(function(e){
 	var flag = false;
@@ -262,43 +273,49 @@ $("div:not(.caption-container, .note-box)").mouseenter(function(){
 })
 $(".caption-container").on("mouseover", ".highlight-question:parent", function(event){
 	NoteBoxType = "question"
-	NoteBoxId = $(this).attr("id")
+	NoteBoxKey = $(this).attr("key")
 	y = $(this).offset().top-10
 	x = $(this).offset().left - 200;
-	firebase.database().ref(fire_route+'/question/'+$(this).attr("id")).once("value").then(function(snapshot) {
+	firebase.database().ref(fire_route+'/question/'+$(this).attr("key")).once("value").then(function(snapshot) {
 	    // concepts = snapshot.val().concepts
 	    content = snapshot.val().content
-	    $(".note-box").css("top", y).css("left", x).css("border-color", 'rgba(255, 27, 61, 0.3)').attr("name", NoteBoxType).attr("id", NoteBoxId).show()
+	    $(".note-box").css("top", y).css("left", x).css("border-color", 'rgba(255, 27, 61, 0.3)').attr("name", NoteBoxType).attr("key", NoteBoxKey).show()
 	    $(".note-box .txt").html(content)
 	    $(".note-box .edit-save").show()
 	})
+	Log("notes:mouseover-question#"+NoteBoxKey);
 })
 $(".caption-container").on("mouseover", ".highlight-notes:parent", function(event){
 	NoteBoxType = 'notes';
-	NoteBoxId = $(this).attr("id");
+	NoteBoxKey = $(this).attr("key");
 	y = $(this).offset().top-10
 	x = $(this).offset().left - 200;
-	firebase.database().ref(fire_route+'/notes/'+$(this).attr("id")).once("value").then(function(snapshot) {
+	firebase.database().ref(fire_route+'/notes/'+$(this).attr("key")).once("value").then(function(snapshot) {
 	    // concepts = snapshot.val().concepts
 	    content = snapshot.val().content
 	    
-	    $(".note-box").css("top", y).css("left", x).css("border-color", 'rgba(251 ,148,19,0.3)').attr("name", NoteBoxType).attr("id", NoteBoxId).show()
+	    $(".note-box").css("top", y).css("left", x).css("border-color", 'rgba(251 ,148,19,0.3)').attr("name", NoteBoxType).attr("key", NoteBoxKey).show()
 	    $(".note-box .txt").html(content)
 	    $(".note-box .edit-save").show()
 	})
+	Log("notes:mouseover-notes#"+NoteBoxKey);
 })
 $(".caption-container").on("mouseover", ".highlight-text:parent", function(event){
-	NoteBoxType = 'text';
-	NoteBoxId = $(this).attr("id");
+	NoteBoxType = 'highlight';
+	NoteBoxKey = $(this).attr("key");
 	y = $(this).offset().top-10
 	x = $(this).offset().left - 200;
-    $(".note-box").css("top", y).css("left", x).css("border-color", 'rgba(226, 209, 9, 0.3)').attr("name", NoteBoxType).attr("id", NoteBoxId).show()
+    $(".note-box").css("top", y).css("left", x).css("border-color", 'rgba(226, 209, 9, 0.3)').attr("name", NoteBoxType).attr("key", NoteBoxKey).show()
     $(".note-box .txt").html("")
     $(".note-box .edit-save").hide();
+
+    Log("notes:mouseover-highlight#"+NoteBoxKey);
 })
 $(".caption-container").on("mouseleave", ".highlight-notes, .highlight-question", function(e){
 	var NoteBox = document.getElementsByClassName('note-box')[0]
 	if(e.toElement!= NoteBox){$(".note-box").hide()}
+
+	Log("notes:mouseleave#"+NoteBoxKey);
 })
 
 $(".note-box").mouseleave(function(){
@@ -310,20 +327,24 @@ $(".note-box .edit-save").click(function(){ //Edit Notes, Edit Question
 		$(".note-box .txt").hide();
 		$(".note-box input").val($(".note-box .txt").html()).show()
 		$(this).html("Save").attr('name', 'save')
+
+		Log("notes:edit#"+NoteBoxKey);
 	}else{
 		//click save
 		//save edited notes to database
-		firebase.database().ref(fire_route+'/'+NoteBoxType+'/'+NoteBoxId+'/content').set(
+		firebase.database().ref(fire_route+'/'+NoteBoxType+'/'+NoteBoxKey+'/content').set(
 			$(".note-box input").val()
 		)
 		$(".note-box .txt").html($(".note-box input").val()).show();
 		$(".note-box input").hide();
 		$(this).html("Edit").attr('name', 'edit')
+
+		Log("notes:save#"+NoteBoxKey);
 	}
 })
 $(".note-box input").keypress(function (e) {
   if (e.which == 13) {
-    firebase.database().ref(fire_route+'/'+NoteBoxType+'/'+NoteBoxId).set({
+    firebase.database().ref(fire_route+'/'+NoteBoxType+'/'+NoteBoxKey).set({
 			"content": $(this).val()
 		})
 	$(".note-box .txt").html($(this).val()).show();
@@ -332,18 +353,20 @@ $(".note-box input").keypress(function (e) {
   }
 });
 $(".note-box .delete").click(function(){
-	var targetID = $(this).parent().attr("id")
+	var targetKey = $(this).parent().attr("key")
 	var targetName = $(this).parent().attr("name")
 	//remove data from firebase
-	firebase.database().ref(fire_route+'/'+targetName+'/'+targetID).remove();
+	firebase.database().ref(fire_route+'/'+targetName+'/'+targetKey).remove();
 	//remove highlight
-	$('.caption-container p[id='+targetID+']').replaceWith(function(){
-		return $(this).text()
+	$('.caption-container div[key='+targetKey+']').replaceWith(function(){
+		return $(this).html()
 	})
 	//remote vedio time marker
-	$('.note-marker-fill[id='+targetID+']').remove()
+	$('.note-marker-fill[key='+targetKey+']').remove()
 	//store new caption
 	firebase.database().ref(fire_route+'/caption').set($('.caption-container').html())
+
+	Log("notes:delete#"+targetKey);
 })
 // $(".caption-container").on("mousedown", ".highlight-notes, .highlight-question, .highlight-text", function(e){
 // 	if(e.button==2){
@@ -352,6 +375,7 @@ $(".note-box .delete").click(function(){
 // 	}
 // })
 $(".note-marker").on("click", ".note-marker-fill", function(){
+	Log("notemarker:"+$(this).attr("time"))
 	videoElement.currentTime = $(this).attr("time")
 })
 
